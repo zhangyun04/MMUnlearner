@@ -294,15 +294,28 @@ class Vanilla_LLaVA_Dataset(Dataset):
                 print(f"Error loading image at index {idx}: {e}")
                 continue
 
-            # Safely load metadata as JSON
-            try:
-                metadata = json.loads(row['metadata'])  # Using json.loads to parse JSON safely
-            except json.JSONDecodeError as e:
-                print(f"Error decoding metadata at index {idx}: {e}")
-                continue
-            for qa_pair in metadata:
-                question = qa_pair.get("Question", "")
-                answer = qa_pair.get("Answer", "")
+            # Check if 'metadata' column exists (old format) or 'question'/'answer' columns exist (new format)
+            if 'metadata' in self.df.columns and pd.notna(row.get('metadata', None)):
+                # Old format: metadata contains JSON with QA pairs
+                try:
+                    metadata = json.loads(row['metadata'])  # Using json.loads to parse JSON safely
+                    for qa_pair in metadata:
+                        question = qa_pair.get("Question", "")
+                        answer = qa_pair.get("Answer", "")
+
+                        if question and answer:
+                            flattened_data.append({
+                                "image": image,
+                                "question": question,
+                                "answer": answer
+                            })
+                except json.JSONDecodeError as e:
+                    print(f"Error decoding metadata at index {idx}: {e}")
+                    continue
+            elif 'question' in self.df.columns and 'answer' in self.df.columns:
+                # New format: question and answer are direct columns
+                question = row['question'] if pd.notna(row.get('question', None)) else ""
+                answer = row['answer'] if pd.notna(row.get('answer', None)) else ""
 
                 if question and answer:
                     flattened_data.append({
@@ -310,6 +323,9 @@ class Vanilla_LLaVA_Dataset(Dataset):
                         "question": question,
                         "answer": answer
                     })
+            else:
+                print(f"Warning: Row {idx} does not have 'metadata' or 'question'/'answer' columns. Skipping.")
+                continue
         # print(flattened_data)
         return flattened_data
     def resize_image(self, image):

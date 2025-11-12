@@ -119,7 +119,7 @@ def load_model_and_processor(args):
         model = get_peft_model(model, lora_config)
         model.print_trainable_parameters()
         processor = AutoProcessor.from_pretrained(args.model_id)
-        processor.tokenizer.padding_side = "right"  # Ensure right padding
+        processor.tokenizer.padding_side = "left"  # Left padding required for Flash Attention 2
     else:
         raise ValueError("Model ID not recognized or not supported. Please provide a valid model ID.")
 
@@ -147,7 +147,7 @@ def main(args):
         print("This is NOT a PEFT model.")
 
     # Define paths to the Parquet files for "forget" and "retain" datasets
-    full_parquet_file = os.path.join(args.data_split_dir, f"train-00000-of-00001.parquet")
+    full_parquet_file = os.path.join("/proj/mmfm/users/hhua/videoagent/code/MMUnlearner/", args.data_split_dir, "Full_Set", f"train-00000-of-00001.parquet")
 
     # Load DataLoader
     full_df = pd.read_parquet(full_parquet_file)
