@@ -72,11 +72,11 @@ To obtain the vanilla models, use the following commands:
 For MLLMU-Bench:  
   
 ```bash
-python MLLMU_finetune.py --model_id path_to_original_model --forget_split_ratio 5 --save_dir path_to_mllmu_vanilla --batch_size 4 --lr 1e-5 --num_epochs 1 --data_split_dir data/MLLMMU-Bench
+python MLLMU_finetune.py --model_id path_to_original_model --vanilla_dir ./mllmu_vanilla --data_split_dir data/MLLMMU-Bench --batch_size 4 --lr 1e-5 --num_epochs 1
 ```
 For CLEAR:  
 ```bash
-python CLEAR_reference.py --model_id path_to_original_model --forget_ratio 5 --save_dir path_to_clear_vanilla --batch_size 4 --lr 1e-5 --num_epochs 1
+python CLEAR_finetune.py --model_id path_to_original_model --vanilla_dir ./mllmu_vanilla --data_split_dir data/MLLMMU-Bench --batch_size 4 --lr 1e-5 --num_epochs 1
 ```
 ## Running Baselines  
 ### GA  
