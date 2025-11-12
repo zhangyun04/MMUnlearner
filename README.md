@@ -46,6 +46,12 @@ This repository contains the **official implementation** of the following paper:
 - [Running MMUnlearner](#running-mmunlearner)
 - [Evaluation](#running-mmunlearner)
 
+## Get Env
+```bash
+conda create --name mllm_unlearn python=3.10
+conda activate mllm_unlearn
+pip install -r requirements.txt
+```
   
 ## Download Dataset  
   
