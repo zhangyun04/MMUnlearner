@@ -13,7 +13,7 @@ import os
 import json
 import argparse
 import torch
-from transformers import LlavaForConditionalGeneration, AutoProcessor, get_scheduler, AdamW, MllamaForConditionalGeneration,Qwen2VLForConditionalGeneration
+from transformers import LlavaForConditionalGeneration, AutoProcessor, get_scheduler, AdamW, MllamaForConditionalGeneration,Qwen2_5_VLForConditionalGeneration
 import json
 from data_process.CLEAR_process import CLEAR_Dataset, CAPTION_MODE, RECOGNITION_MODE, train_collate_clear, NONE_MODE,train_collate_clear_ansonly
 from data_process.CLEAR_process import train_collate_clear
@@ -51,8 +51,8 @@ def load_model_and_processor(args):
         processor = AutoProcessor.from_pretrained(args.model_id)
         processor.tokenizer.padding_side = "right"  # Ensure right padding
     elif "qwen" in args.model_id.lower():
-        model = Qwen2VLForConditionalGeneration.from_pretrained(
-            args.vanilla_dir, 
+        model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+            args.model_id, 
             device_map="auto", 
             torch_dtype=torch.bfloat16, 
             low_cpu_mem_usage=True, 

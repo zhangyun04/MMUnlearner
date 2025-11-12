@@ -11,7 +11,7 @@ import os
 import json
 import argparse
 import torch
-from transformers import LlavaForConditionalGeneration, AutoProcessor, get_scheduler, AdamW, AutoTokenizer,MllamaForConditionalGeneration,Qwen2VLForConditionalGeneration
+from transformers import LlavaForConditionalGeneration, AutoProcessor, get_scheduler, AdamW, AutoTokenizer,MllamaForConditionalGeneration,Qwen2_5_VLForConditionalGeneration
 from peft import LoraConfig, prepare_model_for_kbit_training, get_peft_model
 import json
 from data_process.CLEAR_process import CLEAR_Dataset, CAPTION_MODE, RECOGNITION_MODE, train_collate_clear, NONE_MODE
@@ -95,7 +95,7 @@ def load_model_and_processor(args):
         processor = AutoProcessor.from_pretrained(args.model_id)
         processor.tokenizer.padding_side = "right"  # Ensure right padding
     elif "qwen" in args.model_id.lower():
-        model = Qwen2VLForConditionalGeneration.from_pretrained(
+        model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
             args.model_id, 
             device_map="auto", 
             torch_dtype=torch.bfloat16, 

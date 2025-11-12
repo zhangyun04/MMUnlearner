@@ -10,7 +10,7 @@ import torch
 import json
 import argparse
 import torch
-from transformers import LlavaForConditionalGeneration, AutoProcessor, get_scheduler, AdamW, MllamaForConditionalGeneration,AutoTokenizer,Qwen2VLForConditionalGeneration
+from transformers import LlavaForConditionalGeneration, AutoProcessor, get_scheduler, AdamW, MllamaForConditionalGeneration,AutoTokenizer,Qwen2_5_VLForConditionalGeneration
 from peft import LoraConfig, prepare_model_for_kbit_training, get_peft_model
 from data_process.CLEAR_process import CLEAR_Dataset, CAPTION_MODE, RECOGNITION_MODE, train_collate_clear, NONE_MODE,train_collate_clear_ansonly
 from accelerate import Accelerator
@@ -96,8 +96,8 @@ def load_model_and_processor(args):
         processor = AutoProcessor.from_pretrained(args.model_id)
         processor.tokenizer.padding_side = "right"  # Ensure right padding
     elif "qwen" in args.model_id.lower():
-        model = Qwen2VLForConditionalGeneration.from_pretrained(
-            args.vanilla_dir, 
+        model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+            args.model_id, 
             device_map="auto", 
             torch_dtype=torch.bfloat16, 
             low_cpu_mem_usage=True, 
@@ -155,7 +155,7 @@ def main(args):
     elif "qwen" in args.model_id.lower():
         # Load LLAVA Next model and processor
         print("Loading Oracle qwen model...")
-        oracle_model = Qwen2VLForConditionalGeneration.from_pretrained(
+        oracle_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
             args.oracle_model_id,
             torch_dtype=torch.float16,
             device_map="auto",
